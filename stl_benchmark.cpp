@@ -15,6 +15,7 @@
 
 	Specific Timers
 
+        gcc -DTIMER=Timer1 -lstdc++ -O2 stl_benchmark.cpp -o stl_benchmark_high
         gcc -DTIMER=Timer2 -lstdc++ -O2 stl_benchmark.cpp -o stl_benchmark_chrono
         gcc -DTIMER=Timer3 -lstdc++ -O2 stl_benchmark.cpp -o stl_benchmark_clock
 */
@@ -53,11 +54,11 @@ using namespace std;
 	//#define TIMER Timer3 // clock
 #endif
 
-class Timer
+class Timer1
 {
 public:
 #ifdef WIN32
-	Timer()
+	Timer1()
 	{
 		QueryPerformanceFrequency(&frequency);
 		start.QuadPart = 0;
@@ -94,8 +95,9 @@ private:
 
 #elif __APPLE__
 
-	Timer()
+	Timer1()
 	{
+		cout <<	"Timer: OSX High Precision\n";
 	}
 
 	void Start()
@@ -123,18 +125,22 @@ private:
 	uint64_t start, end, elapsed;
 
 #elif __linux__
-	Timer()
+	Timer1()
 	{
+		timespec result;
+		clock_getres( CLOCK_MONOTONIC, &result );
+		frequency  = result.tv_nsec;
+		cout << "Timer: Linux High Precision   Frequency: " << frequency << "ns \n";
 	}
 
 	void Start()
 	{
-		start = mach_absolute_time(); // nanoseconds
+		clock_gettime( CLOCK_MONOTONIC, &start );
 	}
 
 	void Stop()
 	{
-		end     = mach_absolute_time(); // nanoseconds
+		clock_gettime( CLOCK_MONOTONIC, &end );
 		elapsed = end - start;
 	}
 
@@ -145,11 +151,13 @@ private:
 
 	double GetMs() const
 	{
-		return 0.0;
+		return elapsed; // FIXME: units?
 	}
 
 private:
-	timespec ts;
+	timespec start;
+	timespec end;
+	uint64_t elapsed;
 
 #endif // WIN32, APPLE, LINUX
 };
