@@ -238,9 +238,6 @@ private:
 
 class A
 {
-	int c;
-	std::string string;
-
 public:
 	A(int x)
 	{
@@ -257,6 +254,9 @@ public:
 	{
 		return string;
 	}
+private:
+	int c;
+	std::string string;
 };
 
 
