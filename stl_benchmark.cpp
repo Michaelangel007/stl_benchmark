@@ -294,7 +294,7 @@ private:
 void print(const char* type, TIMER&	timer )
 {
 	const double time  = timer.GetMs();
-    const double ticks = timer.GetTicks();
+	const double ticks = timer.GetTicks();
 
 		cout << "\n*****\n" << type  << endl;
 		cout << "ms: "      << time  << endl;
