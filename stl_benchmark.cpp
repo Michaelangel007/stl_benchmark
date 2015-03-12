@@ -1,5 +1,8 @@
 /*
 
+Article comparing the speed of STL containers and array.
+    http://in2gpu.com/2015/03/09/iterating-over-stl-map-stl-vector-stl-list-and-vector/
+
 = Compile =
 
 == Windows ==
