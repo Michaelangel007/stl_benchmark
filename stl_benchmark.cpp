@@ -69,6 +69,18 @@ public:
 		end.QuadPart   = 0;
 	}
 
+	double GetMs()
+	{
+		double diff = (end.QuadPart - start.QuadPart) ;
+		double tick_interval = 1000.0 / frequency.QuadPart;
+		return diff * tick_interval;
+	}
+
+	double GetTicks()
+	{
+		return elapsed.QuadPart;
+	}
+
 	void Start()
 	{
 		start.QuadPart = 0;
@@ -79,18 +91,6 @@ public:
 	{
 		QueryPerformanceCounter(&end);
 		elapsed.QuadPart = end.QuadPart - start.QuadPart;
-	}
-
-	double GetTicks()
-	{
-		return elapsed.QuadPart;
-	}
-
-	double GetMs()
-	{
-		double diff = (end.QuadPart - start.QuadPart) ;
-		double tick_interval = 1000.0 / frequency.QuadPart;
-		return diff * tick_interval;
 	}
 
 private:
@@ -104,6 +104,16 @@ private:
 		cout <<	"Timer: OSX High Precision\n";
 	}
 
+	double GetMs()
+	{
+		return elapsed / 1000000LL;
+	}
+
+	double GetTicks()
+	{
+		return elapsed;
+	}
+
 	void Start()
 	{
 		start = mach_absolute_time();
@@ -113,16 +123,6 @@ private:
 	{
 		end     = mach_absolute_time(); // nanoseconds
 		elapsed = end - start;
-	}
-
-	double GetTicks()
-	{
-		return elapsed;
-	}
-
-	double GetMs()
-	{
-		return elapsed / 1000000LL;
 	}
 
 private:
@@ -137,6 +137,18 @@ private:
 		cout << "Timer: Linux High Precision   Frequency: " << frequency << "ns \n";
 	}
 
+	double GetMs() const
+	{
+		// http://stackoverflow.com/questions/1269994/nanoseconds-to-milliseconds-fast-division-by-1000000
+		// You will want to verify your compiler actually optimizes this division into a mul
+		return elapsed / 1000000UL;
+	}
+
+	double GetTicks() const
+	{
+		return elapsed;
+	}
+
 	void Start()
 	{
 		clock_gettime( CLOCK_MONOTONIC, &start );
@@ -146,18 +158,6 @@ private:
 	{
 		clock_gettime( CLOCK_MONOTONIC, &end );
 		elapsed = end.tv_nsec - start.tv_nsec;
-	}
-
-	double GetTicks() const
-	{
-		return elapsed;
-	}
-
-	double GetMs() const
-	{
-		// http://stackoverflow.com/questions/1269994/nanoseconds-to-milliseconds-fast-division-by-1000000
-		// You will want to verify your compiler actually optimizes this division into a mul
-		return elapsed / 1000000UL;
 	}
 
 private:
@@ -176,6 +176,15 @@ public:
 		cout << "Timer: std::chrono  Precision:" << hrclock_t::period::den << endl;
 	}
 
+	double GetMs() const
+	{
+		return std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
+	}
+
+	double GetTicks() const{
+		return elapsed.count();
+	}
+
 	void Start()
 	{
 		start = hrclock_t::now();
@@ -184,15 +193,6 @@ public:
 	void Stop(){
 		end = hrclock_t::now();
 		elapsed = (end - start);
-	}
-
-	double GetMs() const
-	{
-		return std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
-	}
-
-	double GetTicks() const{
-		return elapsed.count();
 	}
 
 private:
@@ -209,6 +209,17 @@ public:
 		cout << "Timer: clock()   Precision: Clocks/Second: " << CLOCKS_PER_SEC << endl;
 	}
 
+	double GetMs() const
+	{
+		double timeInSeconds = elapsed / (double)CLOCKS_PER_SEC;
+		return timeInSeconds * 1000.;
+	}
+
+	double GetTicks() const
+	{
+		return elapsed;
+	}
+
 	void Start()
 	{
 		start = clock();
@@ -220,16 +231,6 @@ public:
 		elapsed = end - start;
 	}
 
-	double GetMs() const
-	{
-		double timeInSeconds = elapsed / (double)CLOCKS_PER_SEC;
-		return timeInSeconds * 1000.;
-	}
-
-	double GetTicks() const
-	{
-		return elapsed;
-	}
 private:
 	clock_t start;
 	clock_t end;
@@ -270,18 +271,20 @@ public:
 		a2 = NULL;		
 	}
 
-	~Foo(){
+	~Foo()
+	{
 		delete a1;
-	}
-
-	int Get() const{
-		return x;
 	}
 
 	std::string GetString()
 	{
 		return a1->GetString();
 	}
+
+	int Get() const{
+		return x;
+	}
+
 private:
 	int x;
 	A*  a1;
