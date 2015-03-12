@@ -7,16 +7,16 @@ Article comparing the speed of STL containers and array.
 
 == Windows ==
 
-	Use Microsoft Visual Studio 11 or better
+    Use Microsoft Visual Studio 11 or better
 
 == Linux/OSX ==
 
 
-	Default	Timer
+    Default Timer
 
         gcc -lstdc++ -O2 stl_benchmark.cpp -o stl_benchmark
 
-	Specific Timers
+    Specific Timers
 
         gcc -DTIMER=Timer1 -lstdc++ -O2 stl_benchmark.cpp -o stl_benchmark_high
         gcc -DTIMER=Timer2 -lstdc++ -O2 stl_benchmark.cpp -o stl_benchmark_chrono
