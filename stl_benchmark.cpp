@@ -44,6 +44,7 @@
 	// http://stackoverflow.com/questions/538609/high-resolution-timer-with-c-and-linux
 	// https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_MRG/2/html/Realtime_Reference_Guide/Realtime_Reference_Guide-Timestamping-Clock_Resolution.html
 	// http://tdistler.com/2010/06/27/high-performance-timing-on-linux-windows
+	// http://www.guyrutenberg.com/2007/09/22/profiling-code-using-clock_gettime/
 	#include <sys/time.h>
 #endif
 
@@ -144,7 +145,7 @@ private:
 	void Stop()
 	{
 		clock_gettime( CLOCK_MONOTONIC, &end );
-		elapsed = end - start;
+		elapsed = end.tv_nsec - start.tv_nsec;
 	}
 
 	double GetTicks() const
@@ -154,7 +155,9 @@ private:
 
 	double GetMs() const
 	{
-		return elapsed; // FIXME: units?
+		// http://stackoverflow.com/questions/1269994/nanoseconds-to-milliseconds-fast-division-by-1000000
+		// You will want to verify your compiler actually optimizes this division into a mul
+		return elapsed / 1000000UL;
 	}
 
 private:
