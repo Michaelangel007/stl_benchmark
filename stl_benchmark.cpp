@@ -281,7 +281,7 @@ public:
 		return a1->GetString();
 	}
 
-	int Get() const{
+	int GetX() const{
 		return x;
 	}
 
@@ -335,7 +335,7 @@ int main()
 	timer.Start();
 		for (const auto& i : _map)
 		{
-			total += i.second->Get();
+			total += i.second->GetX();
 			std::string str = i.second->GetString();
 		}
 	timer.Stop();
@@ -347,7 +347,7 @@ int main()
 	timer.Start();
 		for (const auto& i : _unordered)
 		{
-			total += i.second->Get();
+			total += i.second->GetX();
 			std::string str = i.second->GetString();
 		
 		}
@@ -361,7 +361,7 @@ int main()
 	timer.Start();
 		for (int i = 0; i < n; ++i)
 		{
-			total += _vector[i]->Get();
+			total += _vector[i]->GetX();
 			std::string str = _vector[i]->GetString();
 		
 		}
@@ -375,7 +375,7 @@ int main()
 	timer.Start();
 		for (Foo* i: _list)
 		{
-			total += i->Get();
+			total += i->GetX();
 			std::string str = i->GetString();
 		}
 	timer.Stop();
@@ -388,7 +388,7 @@ int main()
 	timer.Start();
 		for (int i = 0 ; i < n; ++i)
 		{
-			total += array[i]->Get();
+			total += array[i]->GetX();
 			std::string str = array[i]->GetString();
 		}
 	timer.Stop();
