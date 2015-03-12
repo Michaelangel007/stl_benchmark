@@ -34,13 +34,16 @@
 #ifdef WIN32
 	#include <Windows.h>
 #elif __APPLE__ // OSX
-	// OSX: https://developer.apple.com/library/mac/qa/qa1398/_index.html
+	// https://developer.apple.com/library/mac/qa/qa1398/_index.html
+	// http://stackoverflow.com/questions/464618/whats-the-equivalent-of-windows-queryperformancecounter-on-osx
 	#include <CoreServices/CoreServices.h>
 	#include <mach/mach.h>
 	#include <mach/mach_time.h>
 	#include <unistd.h>
 #elif __linux__ // LINUX
-	// Linux: http://stackoverflow.com/questions/538609/high-resolution-timer-with-c-and-linux
+	// http://stackoverflow.com/questions/538609/high-resolution-timer-with-c-and-linux
+	// https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_MRG/2/html/Realtime_Reference_Guide/Realtime_Reference_Guide-Timestamping-Clock_Resolution.html
+	// http://tdistler.com/2010/06/27/high-performance-timing-on-linux-windows
 	#include <sys/time.h>
 #endif
 
