@@ -17,7 +17,6 @@
 
         gcc -DTIMER=Timer2 -lstdc++ -O2 stl_benchmark.cpp -o stl_benchmark_chrono
         gcc -DTIMER=Timer3 -lstdc++ -O2 stl_benchmark.cpp -o stl_benchmark_clock
-
 */
 
 
@@ -40,15 +39,16 @@
 	#include <mach/mach_time.h>
 	#include <unistd.h>
 #elif __linux__ // LINUX
-	#include <sys/time.h>
 	// Linux: http://stackoverflow.com/questions/538609/high-resolution-timer-with-c-and-linux
+	#include <sys/time.h>
 #endif
+
 //#include <sstream> // not needed
 
 using namespace std;
 
 #ifndef TIMER
-	//#define TIMER Timer1 // High Performancearray
+	//#define TIMER Timer1 // High Performance Counter
 	  #define TIMER Timer2 // C++ chrono
 	//#define TIMER Timer3 // clock
 #endif
